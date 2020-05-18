@@ -44,7 +44,7 @@ fn add_mats(input: &[&str], mats: &HashMap<String, Mat>) -> Option<Mat>{
 
     match res {
         Some(m) => Some(m),
-        None => {println!("Unable to add matrices {} and {}", input[0], input[2]); None}
+        None => {println!("Unable to add/subtract matrices {} and {}", input[0], input[2]); None}
     }
 }
 
@@ -71,7 +71,7 @@ fn mult_mats(input: &[&str], mats: &HashMap<String, Mat>) -> Option<Mat>{
 
     match Mat::mult(&mat1, &mat2) {
         Some(m) => Some(m),
-        None => {println!("Unable to add matrices {} and {}", input[0], input[2]); None}
+        None => {println!("Unable to multiply matrices {} and {}", input[0], input[2]); None}
     }
 }
 
@@ -108,7 +108,7 @@ fn main() {
 
         let input : Vec<&str> = input.split_whitespace().collect();
 
-        if input[0] == "let" {
+        if input[0] == "let" { //Create a new matrix
             let res = if input.len() == 5 {
                 create_mat(&input)
             } else {
@@ -120,7 +120,7 @@ fn main() {
                 None => println!("Error creating matrix {}", input[1])
             };
         }
-        else if input[0] == "print" {
+        else if input[0] == "print" { //Print existing matrix
             if input.len() < 2 {
                 println!("Not enough aruments given for print\n");
                 continue;
@@ -132,7 +132,7 @@ fn main() {
                 None => println!("Matrix {} not found", input[1])
             };
         }
-        else {
+        else { //Neither creating nore printing anything existing. Go straight to operation and print the temporary result
             match parse_secondary_input(&input, &mats) {
                 Some(mat) => mat.print(),
                 None => ()

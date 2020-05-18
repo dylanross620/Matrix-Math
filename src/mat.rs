@@ -3,7 +3,7 @@ use std::io;
 pub struct Mat {
     rows : u32,
     cols : u32,
-    data : Vec<i64>
+    data : Vec<f64>
 }
 
 impl Mat {
@@ -18,9 +18,10 @@ impl Mat {
         for _ in 0..(rows*cols) {
             let mut num = String::new();
             io::stdin().read_line(&mut num).expect("Failed to read line");
-            let num = match num.trim().parse() {
+            let num : Vec<&str> = num.trim().split_whitespace().collect();
+            let num : f64 = match num[0].parse() { //Ensure that, in the case of spaces within input, only first number will be used as opposed to a 0
                 Ok(n) => n,
-                Err(_) => 0
+                Err(_) => 0.0
             };
             res.data.push(num);
         }
@@ -64,7 +65,7 @@ impl Mat {
         let mut res = Mat{rows: mat1.rows, cols: mat2.cols, data: Vec::new()};
         for r in 0..res.rows {
             for c in 0..res.cols {
-                let mut sum : i64 = 0;
+                let mut sum : f64 = 0.0;
                 for k in 0..mat1.cols {
                     sum += mat1.get(r, k) * mat2.get(k, c);
                 }
@@ -75,13 +76,13 @@ impl Mat {
         return Some(res);
     }
 
-    fn get(&self, row: u32, col: u32) -> i64 {
+    fn get(&self, row: u32, col: u32) -> f64 {
         self.data[(row * self.cols + col) as usize]
     }
 
     pub fn print(&self) {
         //Find largest column size
-        let mut col_sizes : Vec<usize> = vec![0; self.cols as usize];
+        let mut col_sizes : Vec<usize> = vec![0; self.cols as usize]; //Creates a vector initialized with 0's for every column
         for i in 0..self.data.len() as usize{
             if self.data[i].to_string().len() > col_sizes[i % self.cols as usize] {
                 col_sizes[i % self.cols as usize] = self.data[i].to_string().len();
