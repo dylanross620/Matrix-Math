@@ -75,7 +75,33 @@ fn mult_mats(input: &[&str], mats: &HashMap<String, Mat>) -> Option<Mat>{
     }
 }
 
-fn parse_secondary_input (input: &[&str], mats: &HashMap<String, Mat>) -> Option<Mat>{
+fn mult_scalar(input: &[&str], mats : &HashMap<String, Mat>, scalar : f64) -> Option<Mat> {
+    let mut error = false;
+
+    let tmp = Mat::new(0, 0);
+
+    let mut mat = match mats.get(input[2]) { //Check for form scalar * mat
+        Some(m) => m,
+        None => &tmp
+    };
+    if mat.num_rows() == 0 && mat.num_cols() == 0 { //Check for form mat * scalar
+        mat = match mats.get(input[0]) {
+            Some(m) => m,
+            None => {println!("Unable to find matrix {}", input[0]); error = true; &tmp}
+        };
+    }
+
+    if error {
+        return None;
+    }
+
+    match Mat::mult_scalar(&mat, &scalar) {
+        Some(m) => Some(m),
+        None => {println!("Unable to multiply matrix {} by {}", input[2], scalar); None}
+    }
+}
+
+fn parse_secondary_input(input: &[&str], mats: &HashMap<String, Mat>) -> Option<Mat> {
     if input.len() == 1 {
         return match mats.get(input[0]) {
             Some(m) => Some(Mat::copy(m)),
@@ -86,11 +112,31 @@ fn parse_secondary_input (input: &[&str], mats: &HashMap<String, Mat>) -> Option
         return add_mats(&input, &mats);
     }
     else if input.len() >= 3 && input[1] == "*" {
-        return mult_mats(&input, &mats);
+        return match input[0].parse() { //Check if in form scalar * mat
+            Ok(n) => mult_scalar(&input, &mats, n),
+
+            Err(_) => match input[2].parse() { //Check if in form mat * scalar
+                Ok(n) => mult_scalar(&input, &mats, n),
+                Err(_) => mult_mats(&input, &mats)
+            }
+        };
+    }
+    else if input.len() >= 2 && input[0].to_lowercase() == "identity" {
+        return match input[1].parse() {
+            Ok(n) => Some(Mat::identity(n)),
+            Err(_) => None
+        };
+    }
+    else if input.len() >= 2 && (input[0].to_lowercase() == "rref" || input[0].to_lowercase() == "inverse" || input[0].to_lowercase() == "inv") {
+        return match mats.get(input[1]) {
+            Some(n) => Mat::rref(n, input[0].to_lowercase() != "rref"),
+            None => {println!("Unable to find matrix {}", input[1]); None}
+        };
     }
     else {
         println!("Invalid command");
     }
+
     None
 }
 
