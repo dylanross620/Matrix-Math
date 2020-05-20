@@ -178,6 +178,12 @@ fn main() {
                 None => println!("Matrix {} not found", input[1])
             };
         }
+        else if input.len() >= 2 && input[0].to_lowercase() == "det" {
+            match mats.get(input[1]) {
+                Some(m) => println!("{}", m.det()),
+                None => println!("Unable to find matrix {}", input[1])
+            };
+        }
         else { //Neither creating nore printing anything existing. Go straight to operation and print the temporary result
             match parse_secondary_input(&input, &mats) {
                 Some(mat) => mat.print(),

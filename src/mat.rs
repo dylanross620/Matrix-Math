@@ -50,6 +50,27 @@ impl Mat {
         res
     }
 
+    // Create a sub_matrix that is a copy of orig except for the specified row and column
+    fn sub_mat(orig: &Mat, row: u32, col: u32) -> Mat {
+        let mut res = Mat{rows: orig.rows-1, cols: orig.cols-1, data: Vec::with_capacity(((orig.rows-1) * (orig.cols-1)) as usize)};
+
+        for r in 0..orig.rows {
+            if r == row {
+                continue;
+            }
+
+            for c in 0..orig.cols {
+                if c == col {
+                    continue;
+                }
+
+                res.data.push(orig.get(r, c));
+            }
+        }
+
+        res
+    }
+
     pub fn add(mat1: &Mat, mat2: &Mat) -> Option<Mat> {
         if mat1.rows != mat2.rows || mat1.cols != mat2.cols {
             return None;
@@ -241,6 +262,26 @@ impl Mat {
         else {
             Some(res)
         }
+    }
+
+    pub fn det(&self) -> f64 {
+        if self.rows != self.cols {
+            println!("Cannot calculate determinant for a non-square matrix");
+            return 0.0;
+        }
+
+        if self.rows == 2 {
+            return self.data[0] * self.data[3] - self.data[1] * self.data[2];
+        }
+
+        let mut det = 0.0;
+
+        // Use recursive algorithm to calculate the determinant
+        for r in 0..self.rows {
+            det += (-1.0 as f64).powf(r as f64) * self.data[(r * self.cols) as usize] * Mat::sub_mat(self, r, 0).det();
+        }
+
+        det
     }
 
     pub fn print(&self) {
