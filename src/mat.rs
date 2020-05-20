@@ -118,7 +118,7 @@ impl Mat {
     }
 
     //Will set so that dest = mult*src
-    fn add_rows(&mut self, src: u32, dest: u32, mult: f64) {
+    fn add_rows(&mut self, dest: u32, src: u32, mult: f64) {
         if src >= self.rows || dest >= self.rows {
             println!("Attempted to add rows out of bounds");
             return;
@@ -225,9 +225,9 @@ impl Mat {
                 }
 
                 let mult = -1.0 * res.get(r, pivot_col);
-                res.add_rows(pivot_row, r, mult);
+                res.add_rows(r, pivot_row, mult);
                 if inverse {
-                    inv.add_rows(pivot_row, r, mult);
+                    inv.add_rows(r, pivot_row, mult);
                 }
             }
 
