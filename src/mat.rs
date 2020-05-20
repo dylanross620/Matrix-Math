@@ -168,7 +168,7 @@ impl Mat {
         self.cols
     }
 
-    pub fn rref(mat: &Mat, inverse: bool) -> Option<Mat> { //TODO make inverse work properly
+    pub fn rref(mat: &Mat, inverse: bool) -> Option<Mat> {
         if mat.rows != mat.cols && inverse {
             println!("Unable to take inverse of non-square matrix");
             return None;
@@ -227,7 +227,7 @@ impl Mat {
                 let mult = -1.0 * res.get(r, pivot_col);
                 res.add_rows(pivot_row, r, mult);
                 if inverse {
-                    inv.add_rows(r, pivot_row, mult);
+                    inv.add_rows(pivot_row, r, mult);
                 }
             }
 
