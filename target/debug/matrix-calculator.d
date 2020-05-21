@@ -1,1 +1,0 @@
-/home/dylan/Documents/projects/matrix-calculator/target/debug/matrix-calculator: /home/dylan/Documents/projects/matrix-calculator/src/main.rs /home/dylan/Documents/projects/matrix-calculator/src/mat.rs
