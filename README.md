@@ -8,5 +8,6 @@ Interpreter to store matrices and perform operations on them
 - To find the inverse of a matrix, type `<inv/inverse> <mat name>`
 - To find the reduced row-echelon form of a matrix, type `rref <mat name>`
 - To generate an n x n identity matrix, type `identity <n>`
+- To find the transpose of a matrix, type `transpose <mat name>`
 - The results from the above can be saved into a new matrix. For example, to create the matrix `C = A + B`, you would type `let C = A + B`. If the result is not saved to a variable, it will be printed instead
 - To calculate the determinant of a matrix, type `det <mat name>`

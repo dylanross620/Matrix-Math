@@ -133,6 +133,12 @@ fn parse_secondary_input(input: &[&str], mats: &HashMap<String, Mat>) -> Option<
             None => {println!("Unable to find matrix {}", input[1]); None}
         };
     }
+    else if input.len() >= 2 && input[0].to_lowercase() == "transpose" {
+        return match mats.get(input[1]) {
+            Some(n) => Mat::transpose(n),
+            None => {println!("Unable to find matrix {}", input[0]); None}
+        };
+    }
     else {
         println!("Invalid command");
     }
@@ -179,7 +185,7 @@ fn main() {
             };
         }
         else if input.len() >= 2 && input[0].to_lowercase() == "det" {
-            match mats.get(input[1]) {
+            match parse_secondary_input(&input[1..], &mats) {
                 Some(m) => println!("{}", m.det()),
                 None => println!("Unable to find matrix {}", input[1])
             };

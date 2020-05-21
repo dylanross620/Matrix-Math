@@ -125,6 +125,19 @@ impl Mat {
         Some(res)
     }
 
+    //Should never return None, Option return is for consistency
+    pub fn transpose(mat: &Mat) -> Option<Mat> {
+        let mut res = Mat{rows: mat.cols, cols: mat.rows, data: vec![0.0; mat.data.len()]};
+
+        for r in 0..mat.rows {
+            for c in 0..mat.cols {
+                res.set(c, r, mat.get(r, c));
+            }
+        }
+
+        Some(res)
+    }
+
     fn switch_rows(&mut self, row1: u32, row2: u32) {
         if row1 >= self.rows || row2 >= self.rows {
             println!("Attempted row switch out of bounds");
